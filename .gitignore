@@ -32,6 +32,5 @@ Thumbs.db
 *.tsbuildinfo
 next-env.d.ts
 
-# Screenshots (dev artifacts)
-screenshots/
+# Dev artifacts
 screenshot-script.mjs
