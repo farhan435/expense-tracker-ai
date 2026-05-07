@@ -2,7 +2,7 @@
 
 import { useMemo } from 'react';
 import Link from 'next/link';
-import { DollarSign, TrendingUp, Receipt, Calculator, Plus, ArrowRight, Tag } from 'lucide-react';
+import { DollarSign, TrendingUp, Receipt, Calculator, Plus, ArrowRight, Download } from 'lucide-react';
 import { useExpenseContext } from '@/context/ExpenseContext';
 import SummaryCard from '@/components/SummaryCard';
 import CategoryPieChart from '@/components/CategoryPieChart';
@@ -14,6 +14,7 @@ import {
   getSpendingByCategory,
   getMonthlyData,
   getTopCategory,
+  exportToCSV,
 } from '@/lib/utils';
 
 export default function DashboardPage() {
@@ -56,13 +57,23 @@ export default function DashboardPage() {
             Your personal finance overview
           </p>
         </div>
-        <button
-          onClick={() => openDrawer()}
-          className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white px-4 py-2.5 rounded-xl text-sm font-semibold transition-colors shadow-sm"
-        >
-          <Plus className="w-4 h-4" />
-          Add Expense
-        </button>
+        <div className="flex items-center gap-2">
+          <button
+            onClick={() => exportToCSV(expenses)}
+            disabled={expenses.length === 0}
+            className="flex items-center gap-2 border border-slate-200 text-slate-600 hover:bg-slate-50 disabled:opacity-40 disabled:cursor-not-allowed px-4 py-2.5 rounded-xl text-sm font-semibold transition-colors"
+          >
+            <Download className="w-4 h-4" />
+            Export Data
+          </button>
+          <button
+            onClick={() => openDrawer()}
+            className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white px-4 py-2.5 rounded-xl text-sm font-semibold transition-colors shadow-sm"
+          >
+            <Plus className="w-4 h-4" />
+            Add Expense
+          </button>
+        </div>
       </div>
 
       {/* Summary cards */}
