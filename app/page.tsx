@@ -1,13 +1,14 @@
 'use client';
 
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import Link from 'next/link';
-import { DollarSign, TrendingUp, Receipt, Calculator, Plus, ArrowRight, Tag } from 'lucide-react';
+import { DollarSign, TrendingUp, Receipt, Calculator, Plus, ArrowRight, Cloud } from 'lucide-react';
 import { useExpenseContext } from '@/context/ExpenseContext';
 import SummaryCard from '@/components/SummaryCard';
 import CategoryPieChart from '@/components/CategoryPieChart';
 import MonthlyBarChart from '@/components/MonthlyBarChart';
 import RecentExpenses from '@/components/RecentExpenses';
+import CloudExportHub from '@/components/CloudExportHub';
 import {
   formatCurrency,
   getMonthlySpending,
@@ -18,6 +19,7 @@ import {
 
 export default function DashboardPage() {
   const { expenses, loading, openDrawer } = useExpenseContext();
+  const [hubOpen, setHubOpen] = useState(false);
 
   const stats = useMemo(() => {
     const total = expenses.reduce((s, e) => s + e.amount, 0);
@@ -47,6 +49,7 @@ export default function DashboardPage() {
   });
 
   return (
+    <>
     <div className="space-y-6">
       {/* Page header */}
       <div className="flex items-center justify-between">
@@ -56,13 +59,22 @@ export default function DashboardPage() {
             Your personal finance overview
           </p>
         </div>
-        <button
-          onClick={() => openDrawer()}
-          className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white px-4 py-2.5 rounded-xl text-sm font-semibold transition-colors shadow-sm"
-        >
-          <Plus className="w-4 h-4" />
-          Add Expense
-        </button>
+        <div className="flex items-center gap-2">
+          <button
+            onClick={() => setHubOpen(true)}
+            className="flex items-center gap-2 bg-gradient-to-r from-indigo-600 to-violet-600 hover:from-indigo-700 hover:to-violet-700 text-white px-4 py-2.5 rounded-xl text-sm font-semibold transition-all shadow-sm"
+          >
+            <Cloud className="w-4 h-4" />
+            Export Hub
+          </button>
+          <button
+            onClick={() => openDrawer()}
+            className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white px-4 py-2.5 rounded-xl text-sm font-semibold transition-colors shadow-sm"
+          >
+            <Plus className="w-4 h-4" />
+            Add Expense
+          </button>
+        </div>
       </div>
 
       {/* Summary cards */}
@@ -187,5 +199,12 @@ export default function DashboardPage() {
         <RecentExpenses expenses={expenses.slice(0, 8)} />
       </div>
     </div>
+
+    <CloudExportHub
+      expenses={expenses}
+      isOpen={hubOpen}
+      onClose={() => setHubOpen(false)}
+    />
+    </>
   );
 }
